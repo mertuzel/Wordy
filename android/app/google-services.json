@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "518013937753",
+    "project_id": "wordy-90134",
+    "storage_bucket": "wordy-90134.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518013937753:android:270ead25fae0f9c2af6948",
+        "android_client_info": {
+          "package_name": "com.example.chat_app_wordy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518013937753-dqe72cshp3emelvkm4iaq6pr1takltmm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app_wordy",
+            "certificate_hash": "c8182647a1a2bed6c25bccbb1509157bcc4d1241"
+          }
+        },
+        {
+          "client_id": "518013937753-qtaf4ug87aro1l9i79f0r85hnnt2dpr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvWFTUHO4ZLkWZ3SIee_MlBTHL5N7vIwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518013937753-qtaf4ug87aro1l9i79f0r85hnnt2dpr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
