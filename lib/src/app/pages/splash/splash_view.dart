@@ -1,14 +1,15 @@
-import 'package:chat_app_wordy/src/app/constants.dart';
 import 'package:chat_app_wordy/src/app/pages/splash/splash_controller.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_authentication_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashView extends View {
   @override
   State<StatefulWidget> createState() => _SplashViewState(
-        SplashController(),
+        SplashController(
+          DataAuthenticationRepository(),
+        ),
       );
 }
 
