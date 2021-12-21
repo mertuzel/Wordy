@@ -1,4 +1,6 @@
+import 'package:chat_app_wordy/src/app/navigator.dart';
 import 'package:chat_app_wordy/src/app/pages/sign_up/sign_up_presenter.dart';
+import 'package:chat_app_wordy/src/domain/entities/user.dart';
 import 'package:chat_app_wordy/src/domain/repositorires/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
@@ -16,7 +18,17 @@ class SignUpController extends Controller {
 
   @override
   void initListeners() {
-    _presenter.sendEmailLinkOnComplete = () {};
+    _presenter.sendEmailLinkOnComplete = () {
+      WordyNavigator.navigateToEmailLink(
+        getContext(),
+        User(
+          id: '',
+          fullName: fullName,
+          email: email,
+        ),
+        true,
+      );
+    };
 
     _presenter.sendEmailLinkOnError = (e) {};
   }

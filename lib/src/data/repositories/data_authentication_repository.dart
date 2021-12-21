@@ -38,21 +38,12 @@ class DataAuthenticationRepository implements AuthenticationRepository {
     required bool deleteUser,
   }) async {
     try {
-      if (deleteUser) {
-        String deactivatedUserId = _firebaseAuth.currentUser!.uid;
-
-        await _firebaseAuth.signInWithEmailLink(
-            email: email, emailLink: emailLink);
-
-        await _firestore.collection('users').doc(deactivatedUserId).delete();
-
-        return;
-      }
-
-      await _firebaseAuth.currentUser!.linkWithCredential(
-        EmailAuthProvider.credentialWithLink(
-            email: email, emailLink: emailLink),
+      await _firebaseAuth.signInWithEmailLink(
+        email: email,
+        emailLink: emailLink,
       );
+
+      return;
     } on FirebaseAuthException catch (error, st) {
       if (error.code == 'expired-action-code' ||
           error.code == 'invalid-action-code') {
