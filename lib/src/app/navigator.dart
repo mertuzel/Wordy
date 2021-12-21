@@ -1,5 +1,5 @@
+import 'package:chat_app_wordy/src/app/pages/core/core_view.dart';
 import 'package:chat_app_wordy/src/app/pages/email_link/email_link_view.dart';
-import 'package:chat_app_wordy/src/app/pages/home/home_view.dart';
 import 'package:chat_app_wordy/src/app/pages/introduction/introduction_view.dart';
 import 'package:chat_app_wordy/src/app/pages/sign_in/sign_in_view.dart';
 import 'package:chat_app_wordy/src/app/pages/sign_up/sign_up_view.dart';
@@ -27,7 +27,7 @@ class WordyNavigator {
     await Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-        builder: (context) => HomeView(),
+        builder: (context) => CoreView(),
       ),
       (_) => false,
     );

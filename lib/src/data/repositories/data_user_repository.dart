@@ -11,6 +11,7 @@ class DataUserRepository implements UserReposistory {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   late ent.User _currentUser;
+  List<ent.User>? users;
 
   @override
   Future<void> registerUser(ent.User user) async {
@@ -43,6 +44,27 @@ class DataUserRepository implements UserReposistory {
   }
 
   @override
-  // TODO: implement currentUser
   ent.User get currentUser => _currentUser;
+
+  @override
+  Future<List<ent.User>> getUsers() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await _firestore.collection("users").get();
+
+      users = [];
+
+      if (snapshot.docs.isNotEmpty) {
+        snapshot.docs.forEach((doc) {
+          users!.add(ent.User.fromJson(doc));
+        });
+      }
+
+      return users!;
+    } catch (e, st) {
+      print(e);
+      print(st);
+      rethrow;
+    }
+  }
 }

@@ -1,13 +1,16 @@
 import 'package:chat_app_wordy/src/app/constants.dart';
 import 'package:chat_app_wordy/src/app/pages/sign_in/sign_in_controller.dart';
 import 'package:chat_app_wordy/src/app/widgets/default_button.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 
 class SignInView extends View {
   @override
   State<StatefulWidget> createState() => _SignInViewState(
-        SignInController(),
+        SignInController(
+          DataAuthenticationRepository(),
+        ),
       );
 }
 
@@ -63,31 +66,34 @@ class _SignInViewState extends ViewState<SignInView, SignInController> {
                     ),
                     ControlledWidgetBuilder<SignInController>(
                         builder: (context, controller) {
-                      return TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (text) {
-                          if (text != null) {
-                            bool isEmail = RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(text);
-                            if (!isEmail)
-                              return 'Geçersiz Email';
-                            else
-                              return null;
-                          }
-                        },
-                        onChanged: (text) {
-                          controller.email = text;
-                        },
-                        style: kInputTextStyle(Colors.black87),
-                        decoration: InputDecoration(
-                          hintStyle: kHintTextStyle(kHintBlack),
-                          hintText: 'yourname@example',
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: kSecondaryColor),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black12),
+                      return Form(
+                        key: controller.formKey,
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (text) {
+                            if (text != null) {
+                              bool isEmail = RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                  .hasMatch(text);
+                              if (!isEmail)
+                                return 'Geçersiz Email';
+                              else
+                                return null;
+                            }
+                          },
+                          onChanged: (text) {
+                            controller.email = text;
+                          },
+                          style: kInputTextStyle(Colors.black87),
+                          decoration: InputDecoration(
+                            hintStyle: kHintTextStyle(kHintBlack),
+                            hintText: 'yourname@example',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kSecondaryColor),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black12),
+                            ),
                           ),
                         ),
                       );
@@ -98,11 +104,14 @@ class _SignInViewState extends ViewState<SignInView, SignInController> {
               SizedBox(height: 50),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 50),
-                child: DefaultButton(
-                    onPressed: () {},
-                    text: 'Sign In',
-                    backgroundColor: kPrimaryColor,
-                    textColor: kWhite),
+                child: ControlledWidgetBuilder<SignInController>(
+                    builder: (context, controller) {
+                  return DefaultButton(
+                      onPressed: controller.onButtonPressed,
+                      text: 'Sign In',
+                      backgroundColor: kPrimaryColor,
+                      textColor: kWhite);
+                }),
               ),
               SizedBox(height: 60),
               Container(
