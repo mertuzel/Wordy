@@ -24,7 +24,7 @@ class SplashController extends Controller {
         //HomePage
       } else
         Future.delayed(Duration(seconds: 2)).then(
-          (_) => WordyNavigator.navigateToSignIn(getContext()),
+          (_) => WordyNavigator.navigateToIntroduction(getContext()),
         );
     };
   }
