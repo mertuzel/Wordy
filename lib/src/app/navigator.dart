@@ -1,3 +1,4 @@
+import 'package:chat_app_wordy/src/app/pages/chat/chat_view.dart';
 import 'package:chat_app_wordy/src/app/pages/core/core_view.dart';
 import 'package:chat_app_wordy/src/app/pages/email_link/email_link_view.dart';
 import 'package:chat_app_wordy/src/app/pages/introduction/introduction_view.dart';
@@ -76,6 +77,18 @@ class WordyNavigator {
       context,
       CupertinoPageRoute(
         builder: (context) => EmailLinkView(user, isRegister),
+      ),
+    );
+  }
+
+  static Future<void> navigateToChatView(
+    final BuildContext context,
+    final User peerUser,
+  ) async {
+    await Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => ChatView(peerUser),
       ),
     );
   }

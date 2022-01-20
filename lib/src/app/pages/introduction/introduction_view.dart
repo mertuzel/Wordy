@@ -2,13 +2,18 @@ import 'package:chat_app_wordy/src/app/constants.dart';
 import 'package:chat_app_wordy/src/app/navigator.dart';
 import 'package:chat_app_wordy/src/app/pages/introduction/introduction_controller.dart';
 import 'package:chat_app_wordy/src/app/widgets/default_button.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_authentication_repository.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 
 class IntroductionView extends View {
   @override
   State<StatefulWidget> createState() => _IntroductionViewState(
-        IntroductionController(),
+        IntroductionController(
+          DataAuthenticationRepository(),
+          DataUserRepository(),
+        ),
       );
 }
 
@@ -22,8 +27,8 @@ class _IntroductionViewState
     EdgeInsets padding = MediaQuery.of(context).padding;
 
     return Scaffold(
-      backgroundColor: kWhite,
       key: globalKey,
+      backgroundColor: kWhite,
       body: Container(
         width: size.width,
         height: size.height,
@@ -48,16 +53,19 @@ class _IntroductionViewState
                     ),
                   ),
                   SizedBox(height: 15),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50),
-                    child: DefaultButton(
-                      backgroundColor: kPrimaryColor,
-                      textColor: kWhite,
-                      onPressed: () {},
-                      imagePath: 'assets/images/google.png',
-                      text: 'Sign In With Google',
-                    ),
-                  ),
+                  ControlledWidgetBuilder<IntroductionController>(
+                      builder: (context, controller) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      child: DefaultButton(
+                        backgroundColor: kPrimaryColor,
+                        textColor: kWhite,
+                        onPressed: controller.signInWithGoogle,
+                        imagePath: 'assets/images/google.png',
+                        text: 'Sign In With Google',
+                      ),
+                    );
+                  }),
                   SizedBox(height: 15),
                   Text(
                     'or',

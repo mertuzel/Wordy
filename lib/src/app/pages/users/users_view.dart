@@ -1,7 +1,9 @@
 import 'package:chat_app_wordy/src/app/constants.dart';
+import 'package:chat_app_wordy/src/app/navigator.dart';
 import 'package:chat_app_wordy/src/app/pages/users/users_controller.dart';
 import 'package:chat_app_wordy/src/data/repositories/data_user_repository.dart';
 import 'package:chat_app_wordy/src/domain/entities/user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,12 +71,13 @@ class _UsersViewState extends ViewState<UsersView, UsersController> {
                     ),
                   ),
                   SizedBox(height: 60),
-                  if (controller.users!.isNotEmpty)
+                  if (controller.users!.isNotEmpty &&
+                      controller.users!.length != 1)
                     Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.only(left: 35),
                       child: Text(
-                        controller.users!.length.toString() + ' users',
+                        (controller.users!.length - 1).toString() + ' users',
                         style: kAuthenticationTextStyle(
                           kPrimaryColor,
                         ),
@@ -98,6 +101,9 @@ class _UserContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    if (user.id == auth.FirebaseAuth.instance.currentUser!.uid)
+      return Container();
 
     return Stack(
       children: [
@@ -129,7 +135,9 @@ class _UserContainer extends StatelessWidget {
           height: 90,
           width: size.width,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              WordyNavigator.navigateToChatView(context, user);
+            },
             child: Container(),
           ),
         ),

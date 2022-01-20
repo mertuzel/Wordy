@@ -43,6 +43,14 @@ TextStyle kNameStyle(Color color) {
   );
 }
 
+TextStyle kChatNameStyle(Color color) {
+  return TextStyle(
+    color: color,
+    fontSize: 21,
+    fontWeight: FontWeight.w800,
+  );
+}
+
 TextStyle kInformationTextStyle(Color color) {
   return TextStyle(
     color: color,

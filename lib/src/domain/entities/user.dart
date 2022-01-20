@@ -10,7 +10,7 @@ class User {
     required this.fullName,
     required this.email,
   });
-
+//users
   Map<String, dynamic> toJson() {
     return {
       'fullName': fullName,
@@ -18,8 +18,21 @@ class User {
     };
   }
 
+  Map<String, dynamic> toJsonForMessage() {
+    return {
+      'fullName': fullName,
+      'id': id,
+      'email': email,
+    };
+  }
+
   User.fromJson(DocumentSnapshot<Map<String, dynamic>> json)
       : id = json.id,
+        fullName = json['fullName'],
+        email = json['email'];
+
+  User.fromJsonForMessage(Map<String, dynamic> json)
+      : id = json['id'],
         fullName = json['fullName'],
         email = json['email'];
 }
