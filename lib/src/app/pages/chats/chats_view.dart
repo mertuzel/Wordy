@@ -1,5 +1,11 @@
 import 'package:chat_app_wordy/src/app/constants.dart';
+import 'package:chat_app_wordy/src/app/navigator.dart';
 import 'package:chat_app_wordy/src/app/pages/chats/chats_controller.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_chat_repository.dart';
+import 'package:chat_app_wordy/src/data/repositories/data_user_repository.dart';
+import 'package:chat_app_wordy/src/domain/entities/message.dart';
+import 'package:chat_app_wordy/src/domain/entities/user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +30,10 @@ class _ChatsViewHolderState extends State<ChatsViewHolder>
 class ChatsView extends View {
   @override
   State<StatefulWidget> createState() => _ChatsViewSate(
-        ChatsController(),
+        ChatsController(
+          DataUserRepository(),
+          DataChatRepository(),
+        ),
       );
 }
 
@@ -36,27 +45,137 @@ class _ChatsViewSate extends ViewState<ChatsView, ChatsController> {
     EdgeInsets padding = MediaQuery.of(context).padding;
 
     return Scaffold(
+        backgroundColor: kBackgroundColor,
         key: globalKey,
-        body: Column(
-          children: [
-            Container(
-              margin:
-                  EdgeInsets.only(left: 35, top: padding.top + 35, right: 35),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: ControlledWidgetBuilder<ChatsController>(
+            builder: (context, controller) {
+          return controller.lastMessages == null
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                )
+              : Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 35, top: padding.top + 35, right: 35),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Wordy',
+                            style: kBigTextStyle(kPrimaryColor),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child:
+                                SvgPicture.asset('assets/images/profile.svg'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: controller.lastMessages!.isEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.symmetric(horizontal: 45),
+                              child: Text(
+                                'No message history. Lets start a conversation',
+                                textAlign: TextAlign.center,
+                                style: kInputTextStyle(kBlack.withOpacity(0.2)),
+                              ),
+                            )
+                          : ListView(
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              physics: AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics(),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              children: [
+                                for (int i = 0;
+                                    i < controller.lastMessages!.length;
+                                    i++)
+                                  _LastMessageContainer(
+                                      controller.lastMessages![i])
+                              ],
+                            ),
+                    ),
+                  ],
+                );
+        }));
+  }
+}
+
+class _LastMessageContainer extends StatelessWidget {
+  final Message message;
+
+  _LastMessageContainer(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    late User userToShow;
+
+    if (auth.FirebaseAuth.instance.currentUser!.uid == message.from.id) {
+      userToShow = message.to;
+    } else {
+      userToShow = message.from;
+    }
+
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          height: 90,
+          width: size.width,
+          color: kWhite,
+          padding: EdgeInsets.symmetric(horizontal: 27),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                child: Image.asset('assets/images/user.png'),
+                decoration: BoxDecoration(shape: BoxShape.circle),
+              ),
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Wordy',
-                    style: kBigTextStyle(kPrimaryColor),
+                    userToShow.fullName.toString(),
+                    style: kNameStyle(kPrimaryColor),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: SvgPicture.asset('assets/images/profile.svg'),
-                  ),
+                  Text(
+                    message.text,
+                    style: kHintTextStyle(kHintBlack),
+                  )
                 ],
-              ),
-            ),
-          ],
-        ));
+              )
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          height: 90,
+          width: size.width,
+          child: TextButton(
+            style: ButtonStyle(
+                overlayColor:
+                    MaterialStateProperty.resolveWith((_) => kSplashColor)),
+            onPressed: () {
+              WordyNavigator.navigateToChatView(context, userToShow);
+            },
+            child: Container(),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -77,7 +77,11 @@ class _UsersViewState extends ViewState<UsersView, UsersController> {
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.only(left: 35),
                       child: Text(
-                        (controller.users!.length - 1).toString() + ' users',
+                        (controller.users!.length - 1) == 1
+                            ? (controller.users!.length - 1).toString() +
+                                ' user'
+                            : (controller.users!.length - 1).toString() +
+                                ' users',
                         style: kAuthenticationTextStyle(
                           kPrimaryColor,
                         ),
@@ -135,6 +139,9 @@ class _UserContainer extends StatelessWidget {
           height: 90,
           width: size.width,
           child: TextButton(
+            style: ButtonStyle(
+                overlayColor:
+                    MaterialStateProperty.resolveWith((_) => kSplashColor)),
             onPressed: () {
               WordyNavigator.navigateToChatView(context, user);
             },

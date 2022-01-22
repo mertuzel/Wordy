@@ -41,6 +41,8 @@ class ChatController extends Controller {
 
     _presenter.getMessagesOnNext = (List<Message>? response) {
       if (response == null) return;
+      print('object');
+
       messages = response;
       refreshUI();
       Future.delayed(Duration.zero).then((value) {
